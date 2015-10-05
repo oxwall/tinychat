@@ -36,4 +36,4 @@ OW::getLanguage()->importPluginLangs(OW::getPluginManager()->getPlugin('tinychat
 $authorization = OW::getAuthorization();
 $groupName = 'tinychat';
 $authorization->addGroup($groupName);
-$authorization->addAction($groupName, 'block_unauthorized_users');
+$authorization->addAction($groupName, 'use_tiny_chat');

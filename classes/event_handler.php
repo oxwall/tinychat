@@ -73,7 +73,7 @@ class TINYCHAT_CLASS_EventHandler
                 'tinychat' => array(
                     'label' => $language->text('tinychat', 'admin_sidebar_menu_label'),
                     'actions' => array(
-                        'block_unauthorized_users' => $language->text('tinychat', 'block_unauthorized_users')
+                        'use_tiny_chat' => $language->text('tinychat', 'use_tiny_chat')
                     )
                 )
             )
