@@ -48,9 +48,9 @@ class TINYCHAT_CTRL_Page extends OW_ActionController
             throw new AuthenticateException();
         }
 
-        if ( !OW::getUser()->isAuthorized('tinychat', 'get_page') )
+        if ( !OW::getUser()->isAuthorized('tinychat', 'block_unauthorized_users') )
         {
-            $status = BOL_AuthorizationService::getInstance()->getActionStatus('tinychat', 'get_page');
+            $status = BOL_AuthorizationService::getInstance()->getActionStatus('tinychat', 'block_unauthorized_users');
             throw new AuthorizationException($status['msg']);
         }
 

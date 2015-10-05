@@ -62,7 +62,7 @@ class TINYCHAT_CLASS_EventHandler
     public function init()
     {
         OW::getEventManager()->bind('ads.enabled_plugins', 'tinychat_ads_enabled');
-        OW::getEventManager()->bind('admin.add_auth_labels', array($eventHandler, 'onCollectAuthLabels'));
+        OW::getEventManager()->bind('admin.add_auth_labels', array($this, 'onCollectAuthLabels'));
     }
 
     public function onCollectAuthLabels( BASE_CLASS_EventCollector $event )
@@ -70,10 +70,10 @@ class TINYCHAT_CLASS_EventHandler
         $language = OW::getLanguage();
         $event->add(
             array(
-                'newsfeed' => array(
-                    'label' => $language->text('tinychat', 'auth_group_label'),
+                'tinychat' => array(
+                    'label' => $language->text('tinychat', 'admin_sidebar_menu_label'),
                     'actions' => array(
-                        'add_comment' => $language->text('tinychat', 'auth_action_label_get_page')
+                        'block_unauthorized_users' => $language->text('tinychat', 'block_unauthorized_users')
                     )
                 )
             )
