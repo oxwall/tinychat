@@ -32,9 +32,6 @@
 OW::getRouter()->addRoute(new OW_Route('tinychat_admin', 'admin/plugins/tinychat', 'TINYCHAT_CTRL_Admin', 'index'));
 OW::getRouter()->addRoute(new OW_Route('tinychat_main', 'tinychat', 'TINYCHAT_CTRL_Page', 'index'));
 
-function tinychat_ads_enabled( BASE_CLASS_EventCollector $event )
-{
-    $event->add('tinychat');
-}
+TINYCHAT_CLASS_EventHandler::getInstance()->init();
 
-OW::getEventManager()->bind('ads.enabled_plugins', 'tinychat_ads_enabled');
+
