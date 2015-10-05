@@ -32,3 +32,8 @@
 OW::getConfig()->addConfig('tinychat', 'setting_vars', '{}');
 OW::getPluginManager()->addPluginSettingsRouteName('tinychat', 'tinychat_admin');
 OW::getLanguage()->importPluginLangs(OW::getPluginManager()->getPlugin('tinychat')->getRootDir() . 'langs.zip', 'tinychat');
+
+$groupName = 'tinychat';
+$authorization->addGroup($groupName);
+$authorization->addAction($groupName, 'get_page');
+$authorization->addAction($groupName, 'allow_status_update');

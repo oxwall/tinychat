@@ -30,40 +30,61 @@
  */
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
- * @package ow_plugins.tinychat
+ *
+ * @author Sergey Pryadkin <GiperProger@gmail.com>
+ * @package ow_plugins.newsfeed.classes
  * @since 1.0
  */
-class TINYCHAT_CTRL_Page extends OW_ActionController
-{	
-    public function __construct()
-    {
-        parent::__construct();
-    }
+class TINYCHAT_CLASS_EventHandler
+{
+    /**
+     * Singleton instance.
+     *
+     * @var TINYCHAT_CLASS_EventHandler
+     */
+    private static $classInstance;
 
-    public function index()
+    /**
+     * Returns an instance of class (singleton pattern implementation).
+     *
+     * @return TINYCHAT_CLASS_EventHandler
+     */
+    public static function getInstance()
     {
-        if( !OW::getUser()->isAuthenticated() )
+        if ( self::$classInstance === null )
         {
-            throw new AuthenticateException();
+            self::$classInstance = new self();
         }
 
-        if ( !OW::getUser()->isAuthorized('tinychat', 'get_page') )
-        {
-            $status = BOL_AuthorizationService::getInstance()->getActionStatus('tinychat', 'get_page');
-            throw new AuthorizationException($status['msg']);
-        }
-
-        $params = array('room' => md5(OW_URL_HOME), 'join' => 'auto',  'change' => 'none', 'api' => 'none',  'owner' => 'none', 'topic' => 'TinyChat');
-        $params['nick'] = BOL_UserService::getInstance()->getDisplayName(OW::getUser()->getId());
-        $settingsArray = (array)json_decode(OW::getConfig()->getValue('tinychat', 'setting_vars'));
-
-        $params['colorbk'] = ( empty($settingsArray['color']) ? '0x000000' : '0x'.str_replace('#', '', $settingsArray['color']) );
-
-        $this->assign('chatParams', json_encode($params));
-
-        $this->setPageHeading(OW::getLanguage()->text('tinychat', 'index_heading'));
-        $this->setPageTitle(OW::getLanguage()->text('tinychat', 'index_title'));
-        $this->setPageHeadingIconClass('ow_ic_chat');        
+        return self::$classInstance;
     }
+    
+    public function init()
+    {
+        OW::getEventManager()->bind('ads.enabled_plugins', 'tinychat_ads_enabled');
+        OW::getEventManager()->bind('admin.add_auth_labels', array($eventHandler, 'onCollectAuthLabels'));
+    }
+
+    public function onCollectAuthLabels( BASE_CLASS_EventCollector $event )
+    {
+        $language = OW::getLanguage();
+        $event->add(
+            array(
+                'newsfeed' => array(
+                    'label' => $language->text('tinychat', 'auth_group_label'),
+                    'actions' => array(
+                        'add_comment' => $language->text('tinychat', 'auth_action_label_get_page')
+                    )
+                )
+            )
+        );
+    }
+    
+    function tinychat_ads_enabled( BASE_CLASS_EventCollector $event )
+    {
+        $event->add('tinychat');
+    }
+
+
+    
 }
