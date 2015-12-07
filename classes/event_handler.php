@@ -61,7 +61,7 @@ class TINYCHAT_CLASS_EventHandler
     
     public function init()
     {
-        OW::getEventManager()->bind('ads.enabled_plugins', 'tinychat_ads_enabled');
+        OW::getEventManager()->bind('ads.enabled_plugins', array($this,'tinychat_ads_enabled'));
         OW::getEventManager()->bind('admin.add_auth_labels', array($this, 'onCollectAuthLabels'));
     }
 
