@@ -48,7 +48,7 @@ class TINYCHAT_CTRL_Page extends OW_ActionController
             throw new AuthenticateException();
         }
 
-        if ( !OW::getUser()->isAuthorized('tinychat', 'use_tiny_chat') && !OW::getUser()->isAdmin() )
+        if ( !OW::getUser()->isAuthorized('tinychat', 'use_tiny_chat') )
         {
             $status = BOL_AuthorizationService::getInstance()->getActionStatus('tinychat', 'use_tiny_chat');
             throw new AuthorizationException($status['msg']);
