@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This software is intended for use with Oxwall Free Community Software http://www.oxwall.org/ and is
  * licensed under The BSD license.
@@ -29,68 +28,4 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- *
- * @author Sergey Pryadkin <GiperProger@gmail.com>
- * @package ow_plugins.newsfeed.classes
- * @since 1.0
- */
-class TINYCHAT_CLASS_EventHandler
-{
-    /**
-     * Singleton instance.
-     *
-     * @var TINYCHAT_CLASS_EventHandler
-     */
-    private static $classInstance;
-
-    /**
-     * Returns an instance of class (singleton pattern implementation).
-     *
-     * @return TINYCHAT_CLASS_EventHandler
-     */
-    public static function getInstance()
-    {
-        if ( self::$classInstance === null )
-        {
-            self::$classInstance = new self();
-        }
-
-        return self::$classInstance;
-    }
-    
-    public function init()
-    {
-        OW::getEventManager()->bind('ads.enabled_plugins', array($this,'tinychat_ads_enabled'));
-        $this->genericInit();
-
-    }
-
-    public function onCollectAuthLabels( BASE_CLASS_EventCollector $event )
-    {
-        $language = OW::getLanguage();
-        $event->add(
-            array(
-                'tinychat' => array(
-                    'label' => $language->text('tinychat', 'admin_sidebar_menu_label'),
-                    'actions' => array(
-                        'use_tiny_chat' => $language->text('tinychat', 'use_tiny_chat')
-                    )
-                )
-            )
-        );
-    }
-
-    public function genericInit()
-    {
-        OW::getEventManager()->bind('admin.add_auth_labels', array($this, 'onCollectAuthLabels'));
-    }
-    
-    function tinychat_ads_enabled( BASE_CLASS_EventCollector $event )
-    {
-        $event->add('tinychat');
-    }
-
-
-    
-}
+TINYCHAT_CLASS_EventHandler::getInstance()->genericInit();
