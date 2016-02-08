@@ -30,67 +30,39 @@
  */
 
 /**
- *
- * @author Sergey Pryadkin <GiperProger@gmail.com>
- * @package ow_plugins.newsfeed.classes
+ * @author Egor Bulgakov <egor.bulgakov@gmail.com>
+ * @package ow_plugins.event.classes
  * @since 1.0
  */
-class TINYCHAT_CLASS_EventHandler
+class TINYCHANT_CLASS_Credits
 {
-    /**
-     * Singleton instance.
-     *
-     * @var TINYCHAT_CLASS_EventHandler
-     */
-    private static $classInstance;
+    private $actions;
 
-    /**
-     * Returns an instance of class (singleton pattern implementation).
-     *
-     * @return TINYCHAT_CLASS_EventHandler
-     */
-    public static function getInstance()
+    private $authActions = array();
+
+    public function __construct()
     {
-        if ( self::$classInstance === null )
+        $this->actions[] = array('pluginKey' => 'event', 'action' => 'add_event', 'amount' => 0);
+        $this->actions[] = array('pluginKey' => 'event', 'action' => 'add_comment', 'amount' => 0);
+    }
+    
+    public function bindCreditActionsCollect( BASE_CLASS_EventCollector $e )
+    {
+        foreach ( $this->actions as $action )
         {
-            self::$classInstance = new self();
+            $e->add($action);
+        }        
+    }
+    
+    public function triggerCreditActionsAdd()
+    {
+        $e = new BASE_CLASS_EventCollector('usercredits.action_add');
+        
+        foreach ( $this->actions as $action )
+        {
+            $e->add($action);
         }
 
-        return self::$classInstance;
+        OW::getEventManager()->trigger($e);
     }
-    
-    public function init()
-    {
-        OW::getEventManager()->bind('ads.enabled_plugins', array($this,'tinychat_ads_enabled'));
-        $this->genericInit();
-
-    }
-
-    public function onCollectAuthLabels( BASE_CLASS_EventCollector $event )
-    {
-        $language = OW::getLanguage();
-        $event->add(
-            array(
-                'tinychat' => array(
-                    'label' => $language->text('tinychat', 'admin_sidebar_menu_label'),
-                    'actions' => array(
-                        'use_tiny_chat' => $language->text('tinychat', 'use_tiny_chat')
-                    )
-                )
-            )
-        );
-    }
-
-    public function genericInit()
-    {
-        OW::getEventManager()->bind('admin.add_auth_labels', array($this, 'onCollectAuthLabels'));
-    }
-    
-    function tinychat_ads_enabled( BASE_CLASS_EventCollector $event )
-    {
-        $event->add('tinychat');
-    }
-
-
-    
 }
