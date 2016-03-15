@@ -13,6 +13,7 @@
 Updater::getLanguageService()->importPrefixFromZip(dirname(__FILE__).DS.'langs.zip', 'tinychat');
 
 $authorization = Updater::getAuthorizationService();
+$logger = Updater::getLogger();
 
 try
 {
@@ -28,5 +29,8 @@ try
         $authorization->addAction($action, array('en' => 'Use tiny chat'));
     }
 }
-catch ( Exception $e ) { $exArr[] = $e; }
+catch ( Exception $e )
+{
+    $logger->addEntry($e->getMessage());
+}
 
