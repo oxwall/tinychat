@@ -30,4 +30,3 @@ try
 }
 catch ( Exception $e ) { $exArr[] = $e; }
 
-print_r($exArr);
