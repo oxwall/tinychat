@@ -15,22 +15,26 @@ Updater::getLanguageService()->importPrefixFromZip(dirname(__FILE__).DS.'langs.z
 $authorization = Updater::getAuthorizationService();
 $logger = Updater::getLogger();
 
-try
+
+$groupId = $authorization->findGroupIdByName('tinychat');
+
+if( !$groupId )
 {
+    $group = new BOL_AuthorizationGroup();
+    $group->setName('tinychat');
+    $group->setModerated(true);
+    BOL_AuthorizationService::getInstance()->addGroup($group, array());
     $groupId = $authorization->findGroupIdByName('tinychat');
-
-    if ( $groupId )
-    {
-        $action = new BOL_AuthorizationAction();
-        $action->name = 'use_tiny_chat';
-        $action->groupId = $groupId;
-        $action->availableForGuest = false;
-
-        $authorization->addAction($action, array('en' => 'Use tiny chat'));
-    }
 }
-catch ( Exception $e )
+
+$action = $authorization->findAction('tinychat', 'use_tiny_chat');
+
+if ( !$action )
 {
-    $logger->addEntry($e->getMessage());
-}
+    $action = new BOL_AuthorizationAction();
+    $action->name = 'use_tiny_chat';
+    $action->groupId = $groupId;
+    $action->availableForGuest = false;
 
+    $authorization->addAction($action, array('en' => 'Use tiny chat'));
+}
